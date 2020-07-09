@@ -12,6 +12,11 @@ public class Phonebook {
     ArrayList<Phonebook> pblist=new ArrayList<Phonebook>();
 
     public Phonebook(){}
+    public Phonebook(String name, String number){
+        this.name=name;
+        this.number=number;
+        pblist.add(this);
+    }
     public Phonebook(String json){
         jsonParsing(json);
     }

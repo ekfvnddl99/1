@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class Next extends Activity {
-    private int tmg;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

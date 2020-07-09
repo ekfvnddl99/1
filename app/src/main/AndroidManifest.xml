@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Next"/>
+        <activity android:name=".Add"/>
     </application>
 
 </manifest>
