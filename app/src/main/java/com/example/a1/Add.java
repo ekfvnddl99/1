@@ -8,10 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Add extends Activity implements View.OnClickListener{
+public class Add extends Activity implements View.OnClickListener {
+    ArrayList<Phonebook> list=new ArrayList<Phonebook>();
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_click);
@@ -26,9 +28,11 @@ public class Add extends Activity implements View.OnClickListener{
                 String uname=editname.getText().toString();
                 String unum=editnum.getText().toString();
 
+
+                list.add(new Phonebook(uname,unum));
+
                 Intent intent=new Intent(getApplicationContext(), Present.class);
-                intent.putExtra("name", uname);
-                intent.putExtra("number", unum);
+                intent.putExtra("list", list);
                 startActivity(intent);
                 finishAffinity();
             }

@@ -15,21 +15,23 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Present extends Activity implements View.OnClickListener {
 
     PbAdapter adapter=null;
-    ArrayList<Phonebook> list = new ArrayList<Phonebook>();
+    static ArrayList<Phonebook> list = new ArrayList<Phonebook>();
 
-    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pb_list);
-
-        String json=getJsonString();
 
         //BUTTON
         Button addbt=(Button)findViewById(R.id.btn);
@@ -42,23 +44,25 @@ public class Present extends Activity implements View.OnClickListener {
         });
 
         Intent tmp=getIntent();
-        String name=tmp.getStringExtra("name");
-        String num=tmp.getStringExtra("number");
-
-        System.out.println(name);
-        System.out.println(num);
+        ArrayList<Phonebook> pbarr= (ArrayList<Phonebook>) tmp.getSerializableExtra("list");
 
         //LISTVIEW
         ListView listview = (ListView)findViewById(R.id.pb_listview);
 
-        Phonebook pb=new Phonebook(name,num, json);
-        for (int i = 0; i < pb.getList().size(); i++) {
-            list.add(pb.getList().get(i));
+        if(pbarr!=null && pbarr.size()>0){
+            list.add(pbarr.get(pbarr.size()-1));
+        }
+        else if(pbarr==null){
+            list.clear();
+            String json=getJsonString();
+            jsonParsing(json);
+            for (int i = 0; i < Phonebook.pblist.size(); i++) {
+                list.add(Phonebook.pblist.get(i));
+            }
         }
 
         adapter = new PbAdapter(this,R.layout.pb_item, list);
-        if(list.size()>0) adapter.notifyDataSetChanged();
-        else adapter.notifyDataSetInvalidated();
+        adapter.notifyDataSetChanged();
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,6 +99,24 @@ public class Present extends Activity implements View.OnClickListener {
         return json;
     }
 
+    private void jsonParsing(String json){
+        try{
+            JSONObject jobj=new JSONObject(json);
+            JSONArray jarray=jobj.getJSONArray("Phonebook");
+
+            for(int i=0; i<jarray.length(); i++){
+                JSONObject pobj=jarray.getJSONObject(i);
+
+                Phonebook pb=new Phonebook();
+                pb.setName(pobj.getString("name"));
+                pb.setNumber(pobj.getString("number"));
+
+                Phonebook.pblist.add(pb);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onClick(View view) {
