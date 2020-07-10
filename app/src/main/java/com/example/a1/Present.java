@@ -21,11 +21,9 @@ import java.util.ArrayList;
 
 public class Present extends Activity implements View.OnClickListener {
 
+    PbAdapter adapter=null;
     ArrayList<Phonebook> list=null;
-    public ArrayList<Phonebook> getPbList(){
-        System.out.println(list);
-        return list;
-    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pb_list);
@@ -50,7 +48,7 @@ public class Present extends Activity implements View.OnClickListener {
             list.add(pb.getList().get(i));
         }
 
-        final PbAdapter adapter = new PbAdapter(this,R.layout.pb_item, list);
+        adapter = new PbAdapter(this,R.layout.pb_item, list);
         adapter.notifyDataSetChanged();
         listview.setAdapter(adapter);
 

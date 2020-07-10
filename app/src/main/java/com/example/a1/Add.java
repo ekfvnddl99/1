@@ -8,7 +8,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Add extends Activity implements View.OnClickListener{
+    final ArrayList<Phonebook> list=new ArrayList<Phonebook>();
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_click);
@@ -24,14 +28,16 @@ public class Add extends Activity implements View.OnClickListener{
                 String unum=editnum.getText().toString();
 
                 Phonebook pb=new Phonebook(uname,unum);
-                Present p=new Present();
-                p.getPbList().add(pb);
+                list.add(pb);
 
                 finish();
             }
         });
     }
 
+    public ArrayList<Phonebook> getTmpList(){
+        return list;
+    }
 
     @Override
     public void onClick(View view) {
