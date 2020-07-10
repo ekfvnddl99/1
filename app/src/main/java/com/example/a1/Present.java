@@ -24,6 +24,7 @@ public class Present extends Activity implements View.OnClickListener {
     PbAdapter adapter=null;
     ArrayList<Phonebook> list = new ArrayList<Phonebook>();
 
+    
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pb_list);
