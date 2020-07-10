@@ -12,13 +12,13 @@ public class Phonebook {
     ArrayList<Phonebook> pblist=new ArrayList<Phonebook>();
 
     public Phonebook(){}
-    public Phonebook(String name, String number){
-        this.name=name;
-        this.number=number;
-        pblist.add(this);
-    }
-    public Phonebook(String json){
+    public Phonebook(String name, String number, String json){
         jsonParsing(json);
+        if(name!=null && number!=null) {
+            this.name = name;
+            this.number = number;
+            pblist.add(this);
+        }
     }
 
     public void setName(String name){ this.name=name; }

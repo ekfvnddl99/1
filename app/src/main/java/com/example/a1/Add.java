@@ -12,7 +12,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Add extends Activity implements View.OnClickListener{
-    final ArrayList<Phonebook> list=new ArrayList<Phonebook>();
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_click);
@@ -27,16 +26,13 @@ public class Add extends Activity implements View.OnClickListener{
                 String uname=editname.getText().toString();
                 String unum=editnum.getText().toString();
 
-                Phonebook pb=new Phonebook(uname,unum);
-                list.add(pb);
-
-                finish();
+                Intent intent=new Intent(getApplicationContext(), Present.class);
+                intent.putExtra("name", uname);
+                intent.putExtra("number", unum);
+                startActivity(intent);
+                finishAffinity();
             }
         });
-    }
-
-    public ArrayList<Phonebook> getTmpList(){
-        return list;
     }
 
     @Override

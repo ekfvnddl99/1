@@ -22,11 +22,13 @@ import java.util.ArrayList;
 public class Present extends Activity implements View.OnClickListener {
 
     PbAdapter adapter=null;
-    ArrayList<Phonebook> list=null;
+    ArrayList<Phonebook> list = new ArrayList<Phonebook>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pb_list);
+
+        String json=getJsonString();
 
         //BUTTON
         Button addbt=(Button)findViewById(R.id.btn);
@@ -38,18 +40,24 @@ public class Present extends Activity implements View.OnClickListener {
             }
         });
 
+        Intent tmp=getIntent();
+        String name=tmp.getStringExtra("name");
+        String num=tmp.getStringExtra("number");
+
+        System.out.println(name);
+        System.out.println(num);
+
         //LISTVIEW
         ListView listview = (ListView)findViewById(R.id.pb_listview);
-        list = new ArrayList<Phonebook>();
 
-        String json=getJsonString();
-        Phonebook pb=new Phonebook(json);
+        Phonebook pb=new Phonebook(name,num, json);
         for (int i = 0; i < pb.getList().size(); i++) {
             list.add(pb.getList().get(i));
         }
 
         adapter = new PbAdapter(this,R.layout.pb_item, list);
-        adapter.notifyDataSetChanged();
+        if(list.size()>0) adapter.notifyDataSetChanged();
+        else adapter.notifyDataSetInvalidated();
         listview.setAdapter(adapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,8 +94,8 @@ public class Present extends Activity implements View.OnClickListener {
         return json;
     }
 
+
     @Override
     public void onClick(View view) {
-
     }
 }
