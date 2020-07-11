@@ -2,6 +2,7 @@ package com.example.a1;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +36,29 @@ public class Add extends Activity implements View.OnClickListener {
                 String uname=editname.getText().toString();
                 String unum=editnum.getText().toString();
 
-                Present.list.add(new Phonebook(uname,unum));
+                JSONObject obj=new JSONObject();
+                JSONArray arr=new JSONArray();
+                try {
+                    for(int i=0; i<Present.list.size(); i++){
+                        JSONObject tmp=new JSONObject();
+                        tmp.put("name",Present.list.get(i).getName());
+                        tmp.put("number",Present.list.get(i).getNumber());
+                        arr.put(tmp);
+                    }
+
+                    JSONObject tmp=new JSONObject();
+                    tmp.put("name",uname);
+                    tmp.put("number",unum);
+                    arr.put(tmp);
+                    obj.put("Phonebook", arr);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String str=obj.toString();
+                SharedPreferences.Editor edit=getSharedPreferences("contact",MODE_PRIVATE).edit();
+                edit.putString("phone",str);
+                edit.commit();
 
                 Intent intent=new Intent(getApplicationContext(), Present.class);
                 startActivity(intent);

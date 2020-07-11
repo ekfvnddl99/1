@@ -2,6 +2,7 @@ package com.example.a1;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,13 +44,17 @@ public class Present extends Activity implements View.OnClickListener {
             }
         });
 
-        //LISTVIEW
-        ListView listview = (ListView)findViewById(R.id.pb_listview);
-
         if(list.size()==0){
             String json=getJsonString();
             jsonParsing(json);
         }
+
+        SharedPreferences sp=getSharedPreferences("contact",MODE_PRIVATE);
+        String str=sp.getString("phone",null);
+        if(str!=null) jsonParsing(str);
+
+        //LISTVIEW
+        ListView listview = (ListView)findViewById(R.id.pb_listview);
 
         adapter = new PbAdapter(this,R.layout.pb_item, list);
         adapter.notifyDataSetChanged();
@@ -90,6 +95,7 @@ public class Present extends Activity implements View.OnClickListener {
     }
 
     private void jsonParsing(String json){
+        list.clear();
         try{
             JSONObject jobj=new JSONObject(json);
             JSONArray jarray=jobj.getJSONArray("Phonebook");
