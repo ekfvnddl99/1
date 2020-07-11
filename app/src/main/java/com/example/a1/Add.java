@@ -8,12 +8,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Add extends Activity implements View.OnClickListener {
     ArrayList<Phonebook> list=new ArrayList<Phonebook>();
+
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_click);
@@ -28,11 +35,9 @@ public class Add extends Activity implements View.OnClickListener {
                 String uname=editname.getText().toString();
                 String unum=editnum.getText().toString();
 
-
-                list.add(new Phonebook(uname,unum));
+                Present.list.add(new Phonebook(uname,unum));
 
                 Intent intent=new Intent(getApplicationContext(), Present.class);
-                intent.putExtra("list", list);
                 startActivity(intent);
                 finishAffinity();
             }

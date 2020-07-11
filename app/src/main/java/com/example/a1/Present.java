@@ -33,7 +33,7 @@ public class Present extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pb_list);
 
-        //BUTTON
+        //BUTTON-ADD
         Button addbt=(Button)findViewById(R.id.btn);
         addbt.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -43,22 +43,12 @@ public class Present extends Activity implements View.OnClickListener {
             }
         });
 
-        Intent tmp=getIntent();
-        ArrayList<Phonebook> pbarr= (ArrayList<Phonebook>) tmp.getSerializableExtra("list");
-
         //LISTVIEW
         ListView listview = (ListView)findViewById(R.id.pb_listview);
 
-        if(pbarr!=null && pbarr.size()>0){
-            list.add(pbarr.get(pbarr.size()-1));
-        }
-        else if(pbarr==null){
-            list.clear();
+        if(list.size()==0){
             String json=getJsonString();
             jsonParsing(json);
-            for (int i = 0; i < Phonebook.pblist.size(); i++) {
-                list.add(Phonebook.pblist.get(i));
-            }
         }
 
         adapter = new PbAdapter(this,R.layout.pb_item, list);
@@ -111,7 +101,7 @@ public class Present extends Activity implements View.OnClickListener {
                 pb.setName(pobj.getString("name"));
                 pb.setNumber(pobj.getString("number"));
 
-                Phonebook.pblist.add(pb);
+                list.add(pb);
             }
         } catch (JSONException e) {
             e.printStackTrace();
