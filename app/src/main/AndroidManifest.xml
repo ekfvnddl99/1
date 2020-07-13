@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".Next"/>
         <activity android:name=".Add"/>
+        <activity android:name=".Modify"/>
     </application>
 
 </manifest>

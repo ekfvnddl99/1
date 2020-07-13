@@ -7,11 +7,14 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,38 +26,25 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Present extends Activity implements View.OnClickListener {
 
     PbAdapter adapter=null;
     static ArrayList<Phonebook> list = new ArrayList<Phonebook>();
+    int total=0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pb_list);
 
-        //BUTTON-ADD
-        Button addbt=(Button)findViewById(R.id.btn);
-        addbt.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(getApplicationContext(), Add.class);
-                startActivity(intent);
-            }
-        });
-
-        if(list.size()==0){
-            String json=getJsonString();
-            jsonParsing(json);
-        }
-
         SharedPreferences sp=getSharedPreferences("contact",MODE_PRIVATE);
         String str=sp.getString("phone",null);
         if(str!=null) jsonParsing(str);
+        Collections.sort(list);
 
         //LISTVIEW
-        ListView listview = (ListView)findViewById(R.id.pb_listview);
+        final ListView listview = (ListView)findViewById(R.id.pb_listview);
 
         adapter = new PbAdapter(this,R.layout.pb_item, list);
         adapter.notifyDataSetChanged();
@@ -67,31 +57,24 @@ public class Present extends Activity implements View.OnClickListener {
 
                 intent.putExtra("name", list.get(position).getName());
                 intent.putExtra("number", list.get(position).getNumber());
+                list.get(position).setFriendly(list.get(position).getFriendly()+1);
+                intent.putExtra("friendly", list.get(position).getFriendly());
+                total++;
+                intent.putExtra("total",total);
+                intent.putExtra("index", position);
                 startActivity(intent);
             }
         });
-    }
 
-    private String getJsonString()
-    {
-        String json = "";
-
-        try {
-            InputStream is = getAssets().open("db.json");
-            int fileSize = is.available();
-
-            byte[] buffer = new byte[fileSize];
-            is.read(buffer);
-            is.close();
-
-            json = new String(buffer, "UTF-8");
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
-
-        return json;
+        //BUTTON-ADD
+        final Button addbt=(Button)findViewById(R.id.add);
+        addbt.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(), Add.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void jsonParsing(String json){
@@ -106,6 +89,9 @@ public class Present extends Activity implements View.OnClickListener {
                 Phonebook pb=new Phonebook();
                 pb.setName(pobj.getString("name"));
                 pb.setNumber(pobj.getString("number"));
+                pb.setFriendly(pobj.getInt("friendly"));
+
+                total+=pobj.getInt("friendly");
 
                 list.add(pb);
             }

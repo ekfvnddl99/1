@@ -17,16 +17,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Add extends Activity implements View.OnClickListener {
-    ArrayList<Phonebook> list=new ArrayList<Phonebook>();
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_click);
 
-        Button okaybt=(Button)findViewById(R.id.okay);
+        Button okaybt=(Button)findViewById(R.id.okay1);
         okaybt.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View view) {
@@ -43,12 +42,14 @@ public class Add extends Activity implements View.OnClickListener {
                         JSONObject tmp=new JSONObject();
                         tmp.put("name",Present.list.get(i).getName());
                         tmp.put("number",Present.list.get(i).getNumber());
+                        tmp.put("friendly",Present.list.get(i).getFriendly());
                         arr.put(tmp);
                     }
 
                     JSONObject tmp=new JSONObject();
                     tmp.put("name",uname);
                     tmp.put("number",unum);
+                    tmp.put("friendly",0);
                     arr.put(tmp);
                     obj.put("Phonebook", arr);
                 } catch (JSONException e) {
